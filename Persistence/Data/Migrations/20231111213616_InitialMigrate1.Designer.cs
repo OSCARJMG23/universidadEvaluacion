@@ -11,8 +11,8 @@ using Persistence.Data;
 namespace Persistence.Data.Migrations
 {
     [DbContext(typeof(ApiUniversidadContext))]
-    [Migration("20231110220542_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20231111213616_InitialMigrate1")]
+    partial class InitialMigrate1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -22,35 +22,22 @@ namespace Persistence.Data.Migrations
                 .HasAnnotation("ProductVersion", "7.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("AsignaturaPersona", b =>
-                {
-                    b.Property<int>("AsignaturasId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PersonasId")
-                        .HasColumnType("int");
-
-                    b.HasKey("AsignaturasId", "PersonasId");
-
-                    b.HasIndex("PersonasId");
-
-                    b.ToTable("AsignaturaPersona");
-                });
-
             modelBuilder.Entity("Domain.Entities.AlumnoSeMatriculaAsignatura", b =>
                 {
-                    b.Property<int>("IdAlumnoFk")
+                    b.Property<int>("IdAsignaturaFk")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdAsignaturaFk")
+                    b.Property<int>("IdAlumnoFk")
                         .HasColumnType("int");
 
                     b.Property<int>("IdCursoFk")
                         .HasColumnType("int");
 
-                    b.HasKey("IdAlumnoFk", "IdAsignaturaFk", "IdCursoFk");
+                    b.HasKey("IdAsignaturaFk", "IdAlumnoFk", "IdCursoFk");
 
-                    b.HasIndex("IdAsignaturaFk");
+                    b.HasIndex("IdAlumnoFk");
+
+                    b.HasIndex("IdCursoFk");
 
                     b.ToTable("AlumnoSeMatriculaAsignatura", (string)null);
                 });
@@ -73,13 +60,18 @@ namespace Persistence.Data.Migrations
                     b.Property<int>("IdGradoFk")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdProfesorFk")
+                    b.Property<int?>("IdProfesorFk")
                         .HasColumnType("int");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Tipo")
+                        .IsRequired()
+                        .HasMaxLength(12)
+                        .HasColumnType("varchar");
 
                     b.HasKey("Id");
 
@@ -178,10 +170,19 @@ namespace Persistence.Data.Migrations
                         .HasMaxLength(25)
                         .HasColumnType("varchar(25)");
 
-                    b.Property<string>("Telefono")
+                    b.Property<string>("Sexo")
                         .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)");
+
+                    b.Property<string>("Telefono")
                         .HasMaxLength(9)
                         .HasColumnType("varchar(9)");
+
+                    b.Property<string>("Tipo")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)");
 
                     b.HasKey("Id");
 
@@ -190,32 +191,17 @@ namespace Persistence.Data.Migrations
 
             modelBuilder.Entity("Domain.Entities.Profesor", b =>
                 {
-                    b.Property<int>("IdProfesor")
+                    b.Property<int>("Id")
                         .HasColumnType("int");
 
                     b.Property<int>("IdDepartamentoFk")
                         .HasColumnType("int");
 
-                    b.HasKey("IdProfesor");
+                    b.HasKey("Id");
 
                     b.HasIndex("IdDepartamentoFk");
 
                     b.ToTable("profesor", (string)null);
-                });
-
-            modelBuilder.Entity("AsignaturaPersona", b =>
-                {
-                    b.HasOne("Domain.Entities.Asignatura", null)
-                        .WithMany()
-                        .HasForeignKey("AsignaturasId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.Persona", null)
-                        .WithMany()
-                        .HasForeignKey("PersonasId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Entities.AlumnoSeMatriculaAsignatura", b =>
@@ -234,7 +220,7 @@ namespace Persistence.Data.Migrations
 
                     b.HasOne("Domain.Entities.CursoEscolar", "CursoEscolar")
                         .WithMany("AlumnoSeMatriculaAsignaturas")
-                        .HasForeignKey("IdAsignaturaFk")
+                        .HasForeignKey("IdCursoFk")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -255,9 +241,7 @@ namespace Persistence.Data.Migrations
 
                     b.HasOne("Domain.Entities.Profesor", "Profesor")
                         .WithMany("Asignaturas")
-                        .HasForeignKey("IdProfesorFk")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("IdProfesorFk");
 
                     b.Navigation("Grado");
 
@@ -266,15 +250,15 @@ namespace Persistence.Data.Migrations
 
             modelBuilder.Entity("Domain.Entities.Profesor", b =>
                 {
-                    b.HasOne("Domain.Entities.Departamento", "Departamento")
+                    b.HasOne("Domain.Entities.Persona", "Persona")
                         .WithMany("Profesores")
-                        .HasForeignKey("IdDepartamentoFk")
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.Persona", "Persona")
+                    b.HasOne("Domain.Entities.Departamento", "Departamento")
                         .WithMany("Profesores")
-                        .HasForeignKey("IdProfesor")
+                        .HasForeignKey("IdDepartamentoFk")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -12,11 +12,11 @@ namespace produccion.Configuration
             // Configuración de la entidad
             builder.ToTable("profesor");
 
-            builder.HasKey(t=> t.IdProfesor);
+            /* builder.HasKey(t=> t.IdProfesor); */
 
             builder.HasOne(e => e.Persona)
                 .WithMany(e => e.Profesores)
-                .HasForeignKey(e => e.IdProfesor);
+                .HasForeignKey(e => e.Id);
 
             builder.HasOne(e => e.Departamento)
                 .WithMany(e => e.Profesores)

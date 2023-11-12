@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.Data;
 
@@ -10,9 +11,11 @@ using Persistence.Data;
 namespace Persistence.Data.Migrations
 {
     [DbContext(typeof(ApiUniversidadContext))]
-    partial class ApiUniversidadContextModelSnapshot : ModelSnapshot
+    [Migration("20231111213253_InitialMigrate")]
+    partial class InitialMigrate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,7 +60,7 @@ namespace Persistence.Data.Migrations
                     b.Property<int>("IdGradoFk")
                         .HasColumnType("int");
 
-                    b.Property<int?>("IdProfesorFk")
+                    b.Property<int>("IdProfesorFk")
                         .HasColumnType("int");
 
                     b.Property<string>("Nombre")
@@ -238,7 +241,9 @@ namespace Persistence.Data.Migrations
 
                     b.HasOne("Domain.Entities.Profesor", "Profesor")
                         .WithMany("Asignaturas")
-                        .HasForeignKey("IdProfesorFk");
+                        .HasForeignKey("IdProfesorFk")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Grado");
 

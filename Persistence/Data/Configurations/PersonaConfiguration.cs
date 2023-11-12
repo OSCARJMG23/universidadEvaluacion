@@ -37,8 +37,15 @@ namespace produccion.Configuration
                 .HasMaxLength(50);
 
             builder.Property(e => e.Telefono)
-                .IsRequired()
                 .HasMaxLength(9);
+
+            builder.Property(e => e.Sexo)
+                .IsRequired()
+                .HasMaxLength(10);
+
+            builder.Property(e => e.Tipo)
+                .IsRequired()
+                .HasMaxLength(10);
             
         }
     }

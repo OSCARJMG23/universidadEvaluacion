@@ -12,7 +12,7 @@ namespace produccion.Configuration
             // Configuración de la entidad
             builder.ToTable("AlumnoSeMatriculaAsignatura");
 
-            builder.HasKey(r=> new {r.IdAlumnoFk, r.IdAsignaturaFk, r.IdCursoFk});
+            /* builder.HasKey(r=> new {r.IdAlumnoFk, r.IdAsignaturaFk, r.IdCursoFk});
 
             builder.HasOne(e => e.Alumno)
                 .WithMany(e => e.AlumnoSeMatriculaAsignaturas)
@@ -24,7 +24,7 @@ namespace produccion.Configuration
 
             builder.HasOne(e => e.CursoEscolar)
                 .WithMany(e => e.AlumnoSeMatriculaAsignaturas)
-                .HasForeignKey(e => e.IdAsignaturaFk);
+                .HasForeignKey(e => e.IdAsignaturaFk); */
         }
     }
 }

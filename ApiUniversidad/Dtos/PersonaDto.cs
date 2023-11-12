@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Domain.Entities
+namespace ApiUniversidad.Dtos
 {
-    public class Persona : BaseEntity
+    public class PersonaDto
     {
+        public int Id { get; set; }
         public string Nif { get; set; }
         public string Nombre { get; set; }
         public string Apellido1 { get; set; }
@@ -17,8 +18,5 @@ namespace Domain.Entities
         public DateTime  FechaNacimiento { get; set; }
         public string Sexo { get; set; }
         public string Tipo { get; set; }
-        public ICollection<AlumnoSeMatriculaAsignatura> AlumnoSeMatriculaAsignaturas { get; set; }
-        public ICollection<Asignatura> Asignaturas { get; set; }
-        public ICollection<Profesor> Profesores { get; set; }
     }
 }

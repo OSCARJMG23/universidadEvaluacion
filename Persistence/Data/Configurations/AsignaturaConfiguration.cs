@@ -20,8 +20,12 @@ namespace produccion.Configuration
                 .IsRequired()
                 .HasColumnType("float");
 
-            builder.Property(e => e.Curso)
+            builder.Property(e => e.Tipo)
                 .IsRequired()
+                .HasColumnType("varchar")
+                .HasMaxLength(12);
+
+            builder.Property(e => e.Curso)
                 .HasColumnType("int");
 
             builder.Property(e => e.Cuatrimestre)
@@ -35,6 +39,27 @@ namespace produccion.Configuration
             builder.HasOne(e => e.Grado)
                 .WithMany(e => e.Asignaturas)
                 .HasForeignKey(e => e.IdGradoFk);
+
+            builder.HasMany(e => e.Personas)
+                .WithMany(r => r.Asignaturas)
+                .UsingEntity<AlumnoSeMatriculaAsignatura>(
+                    j =>
+                    {
+                        j.HasOne(p => p.Asignatura)
+                         .WithMany(p => p.AlumnoSeMatriculaAsignaturas)
+                         .HasForeignKey(p => p.IdAsignaturaFk);
+            
+                        j.HasOne(e => e.Alumno)
+                         .WithMany(e => e.AlumnoSeMatriculaAsignaturas)
+                         .HasForeignKey(e => e.IdAlumnoFk);
+
+                        j.HasOne(e=>e.CursoEscolar)
+                        .WithMany(e=>e.AlumnoSeMatriculaAsignaturas)
+                        .HasForeignKey(e=>e.IdCursoFk);
+            
+                        j.ToTable("AlumnoSeMatriculaAsignatura");
+                        j.HasKey(t => new { t.IdAsignaturaFk, t.IdAlumnoFk, t.IdCursoFk });
+                    });
         }
     }
 }

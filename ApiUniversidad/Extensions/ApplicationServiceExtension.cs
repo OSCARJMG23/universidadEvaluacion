@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.UnitOfWork;
+using Domain.Interfaces;
 
 namespace ApiUniversidad.Extensions
 {
@@ -15,5 +17,10 @@ namespace ApiUniversidad.Extensions
                 .AllowAnyMethod()      
                 .AllowAnyHeader());     
         });
+
+        public static void AddAplicacionServices(this IServiceCollection services)
+        {
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+        }
     }
 }

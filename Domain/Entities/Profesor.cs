@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class Profesor
+    public class Profesor : BaseEntity
     {
-        public int IdProfesor { get; set; }
         public Persona Persona { get; set; }
         public int IdDepartamentoFk { get; set; }
         public Departamento Departamento { get; set; }
